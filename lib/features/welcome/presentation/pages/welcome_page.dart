@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ui/features/welcome/widgets/text_input.dart';
+import 'package:ui/features/welcome/presentation/cubit/user_cubit.dart';
+import 'package:ui/features/welcome/presentation/widgets/text_input.dart';
+
+class WelcomePageWrapper extends StatelessWidget {
+  const WelcomePageWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => UserCubit(),
+      child: const WelcomePage(),
+    );
+  }
+}
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});

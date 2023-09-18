@@ -1,8 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ui/features/chat/pages/chat.dart';
-import 'package:ui/features/home/pages/home.dart';
-import 'package:ui/features/welcome/pages/welcome_page.dart';
+import 'package:ui/features/add/presentation/pages/create_new_contact.dart';
+import 'package:ui/features/chat/presentation/pages/chat.dart';
+import 'package:ui/features/home/presentation/pages/home.dart';
+import 'package:ui/features/welcome/presentation/pages/welcome_page.dart';
 
 class AppRoutes {
   static GlobalKey<NavigatorState> mainNav = GlobalKey(debugLabel: 'Nav Key');
@@ -22,8 +23,12 @@ class AppRoutes {
       GoRoute(
           path: '/chat/:index',
           builder: (context, state) {
-            return Chat(title: state.pathParameters['index']!);
+            return ChatScreen(title: state.pathParameters['index']!);
           }),
+      GoRoute(
+        path: '/new-contact',
+        builder: (context, state) => const NewContact(),
+      )
     ],
   );
 }

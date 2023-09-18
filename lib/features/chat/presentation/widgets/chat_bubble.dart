@@ -74,6 +74,7 @@ class TimeStampedChatRenderObject extends RenderBox {
   late TextDirection _textDirection;
   late TextPainter _textPainter;
   late TextPainter _sentAtTextPainter;
+
   late bool _sentAtFitsOnLastLine;
   late double _lineHeight;
   late double _lastMessageLineWidth;

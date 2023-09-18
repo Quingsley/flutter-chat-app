@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ui/styles/theme.dart';
 
 class ContactCard extends StatelessWidget {
   const ContactCard({super.key, required this.index});
@@ -12,10 +13,10 @@ class ContactCard extends StatelessWidget {
       onTap: () => context.push('/chat/$index'),
       leading: CircleAvatar(
         radius: 30,
-        backgroundColor: const Color(0xFFFDC100).withOpacity(.8),
+        backgroundColor: AppTheme.kSecondaryColor.withOpacity(.8),
         child: Icon(
           Icons.person,
-          color: const Color(0xFF2e6b47).withOpacity(.8),
+          color: AppTheme.kPrimaryColor.withOpacity(.8),
           size: 30,
         ),
       ),
@@ -49,7 +50,7 @@ class ContactCard extends StatelessWidget {
             height: 20,
             width: 20,
             decoration: BoxDecoration(
-              color: const Color(0xFFFDC100),
+              color: AppTheme.kSecondaryColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Center(
