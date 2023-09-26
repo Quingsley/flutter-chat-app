@@ -1,9 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/features/add/presentation/pages/create_new_contact.dart';
 import 'package:ui/features/chat/presentation/pages/chat.dart';
 import 'package:ui/features/home/presentation/pages/home.dart';
-import 'package:ui/features/welcome/presentation/pages/welcome_page.dart';
+import 'package:ui/features/auth/presentation/pages/auth_page.dart';
 
 class AppRoutes {
   static GlobalKey<NavigatorState> mainNav = GlobalKey(debugLabel: 'Nav Key');
@@ -12,7 +13,7 @@ class AppRoutes {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const WelcomePage(),
+        builder: (context, state) => const AuthPage(),
       ),
       GoRoute(
         path: '/home',
@@ -32,3 +33,7 @@ class AppRoutes {
     ],
   );
 }
+
+final appRouterProvider = Provider<GoRouter>((ref) {
+  return AppRoutes.router;
+});

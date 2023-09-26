@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ui/styles/theme.dart';
+import 'package:ui/features/auth/data/models/user_model.dart';
 
 class ContactCard extends StatelessWidget {
-  const ContactCard({super.key, required this.index});
-  final int index;
+  const ContactCard({super.key, required this.user});
+  final User user;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => context.push('/chat/$index'),
+      onTap: () => context.push('/chat/${user.userName}'),
       leading: CircleAvatar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         radius: 30,
-        backgroundColor: AppTheme.kSecondaryColor.withOpacity(.8),
         child: Icon(
           Icons.person,
-          color: AppTheme.kPrimaryColor.withOpacity(.8),
+          color: Theme.of(context).colorScheme.onPrimary,
           size: 30,
         ),
       ),
       title: Text(
         'Jerome',
         style: GoogleFonts.poppins(
-          color: Colors.white,
           fontSize: 20,
         ),
       ),
       subtitle: Text(
         'Hey, how are you?',
         style: GoogleFonts.openSans(
-          color: Colors.grey[400],
+          color: Colors.grey[600],
           fontSize: 16,
         ),
       ),
@@ -39,7 +38,6 @@ class ContactCard extends StatelessWidget {
           Text(
             '12:30',
             style: GoogleFonts.openSans(
-              color: Colors.white,
               fontSize: 16,
             ),
           ),
@@ -50,14 +48,13 @@ class ContactCard extends StatelessWidget {
             height: 20,
             width: 20,
             decoration: BoxDecoration(
-              color: AppTheme.kSecondaryColor,
+              color: Theme.of(context).colorScheme.secondary,
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Center(
               child: Text(
                 '2',
                 style: TextStyle(
-                  color: Colors.white,
                   fontSize: 12,
                 ),
               ),

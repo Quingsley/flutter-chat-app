@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ui/features/chat/presentation/pages/chat.dart';
-import 'package:ui/styles/theme.dart';
 
 class NewMessageInput extends StatefulWidget {
   const NewMessageInput({super.key});
@@ -31,45 +30,45 @@ class _NewMessageInputState extends State<NewMessageInput> {
             fontFamily: GoogleFonts.poppins().fontFamily),
         decoration: InputDecoration(
           filled: true,
-          fillColor: AppTheme.kPrimaryColor,
+          fillColor: Theme.of(context).colorScheme.primary,
           hintText: 'Type a message',
           contentPadding: const EdgeInsets.all(20),
           hintStyle: const TextStyle(
             color: Colors.white,
           ),
-          border: const OutlineInputBorder(
+          border: OutlineInputBorder(
             borderSide: BorderSide(
-              color: AppTheme.kSecondaryColor,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(100)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppTheme.kSecondaryColor.withOpacity(.5),
+              color: Theme.of(context).colorScheme.secondary,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(100)),
           ),
-          focusedBorder: const OutlineInputBorder(
+          enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: AppTheme.kSecondaryColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(100)),
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
           ),
           suffixIcon: IconButton(
             onPressed: () {
               chats.add(
                 Chat(
-                  isMe: false,
+                  isMe: true,
                   text: _controller.text,
                   date: DateTime.now(),
                 ),
               );
               _controller.clear();
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.send,
               size: 30,
-              color: AppTheme.kSecondaryColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ),

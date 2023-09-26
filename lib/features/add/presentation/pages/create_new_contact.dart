@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ui/features/add/presentation/widgets/new_contact_card.dart';
-import 'package:ui/styles/theme.dart';
+import 'package:ui/features/add/presentation/widgets/new_contact_button.dart';
+import 'package:ui/features/home/presentation/widgets/contact_card.dart';
+import 'package:ui/shared/providers/shared_providers.dart';
 
-class NewContact extends StatelessWidget {
+class NewContact extends ConsumerWidget {
   const NewContact({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var user = ref.watch(currentUserProvider);
+    var contacts = ref.watch(contactsFutureProvider(user!.email));
     return Scaffold(
-      backgroundColor: AppTheme.kPrimaryColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.kSecondaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: Text('New Contact',
             style: GoogleFonts.poppins(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
               fontSize: 20,
             )),
         centerTitle: true,
@@ -23,80 +27,47 @@ class NewContact extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Builder(builder: (context) {
-              return GestureDetector(
-                onTap: () => Scaffold.of(context).showBottomSheet(
-                  (context) => const NewContactCard(),
-                  backgroundColor: AppTheme.kSecondaryColor,
-                  elevation: 0,
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade700,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      width: 60,
-                      height: 60,
-                      child: const Center(
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Positioned(
-                              left: 24,
-                              top: 5,
-                              child: Icon(
-                                Icons.add,
-                                size: 20,
-                                color: AppTheme.kSecondaryColor,
-                              ),
-                            ),
-                            Positioned(
-                              right: 10,
-                              child: Icon(
-                                Icons.person,
-                                size: 40,
-                                color: AppTheme.kSecondaryColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'New contact',
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+            const NewContactBtn(),
             const SizedBox(
               height: 10,
             ),
             Text(
               'Contacts on WeeChat',
               style: GoogleFonts.poppins(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.secondary,
                 fontSize: 20,
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            const Expanded(
-              child: Placeholder(
-                color: Colors.white,
-              ),
+            Expanded(
+              child: contacts.when(
+                  data: (data) {
+                    if (data.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'No Contacts found',
+                          style: GoogleFonts.poppins(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontSize: 20,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ContactCard(
+                              user: data[index],
+                            );
+                          });
+                    }
+                  },
+                  error: (err, stackTrace) =>
+                      Center(child: Text(err.toString())),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator())),
             ),
           ],
         ),

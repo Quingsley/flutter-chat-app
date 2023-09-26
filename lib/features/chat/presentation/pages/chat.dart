@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ui/features/chat/presentation/widgets/chat_bubble.dart';
 import 'package:ui/features/chat/presentation/widgets/new_message_input.dart';
-import 'package:ui/styles/theme.dart';
 
 class Chat {
   final String text;
@@ -32,14 +31,14 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
-      backgroundColor: AppTheme.kPrimaryColor.withOpacity(.7),
       appBar: AppBar(
-        backgroundColor: AppTheme.kSecondaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: Text(
           widget.title,
           style: GoogleFonts.poppins(
             fontSize: 20,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
         centerTitle: true,
@@ -52,12 +51,12 @@ class _ChatScreenState extends State<ChatScreen> {
               child: ListView.builder(
                 itemCount: chats.length,
                 itemBuilder: (context, index) {
-                  return chatBubble(chats[index]);
+                  return chatBubble(chats[index], context);
                 },
               ),
             ),
           SizedBox(
-            height: chats.isEmpty ? size.height * 0.75 : 0,
+            height: chats.isEmpty ? size.height * 0.3 : 0,
           ),
           const NewMessageInput()
         ],
@@ -67,7 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Align chatBubble(Chat chat) {
+  Align chatBubble(Chat chat, BuildContext context) {
     const isMeBorderRadius = BorderRadius.only(
       topLeft: Radius.circular(12),
       bottomRight: Radius.circular(12),
@@ -77,8 +76,8 @@ class _ChatScreenState extends State<ChatScreen> {
       bottomLeft: Radius.circular(12),
     );
 
-    Color isMeChatColor = AppTheme.kSecondaryColor.withOpacity(.8);
-    Color isOtherChatColor = AppTheme.kPrimaryColor.withOpacity(.9);
+    Color isMeChatColor = Theme.of(context).colorScheme.secondary;
+    Color isOtherChatColor = Theme.of(context).colorScheme.primary;
 
     return Align(
       alignment: chat.isMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -89,13 +88,47 @@ class _ChatScreenState extends State<ChatScreen> {
           borderRadius: chat.isMe ? isMeBorderRadius : isOtherBorderRadius,
         ),
         padding: const EdgeInsets.all(15),
-        child: TimeStampChatBubble(
-          text: chat.text,
-          sentAt: formatChatTime(chat.date),
-          textStyle: GoogleFonts.openSans(
-            color: chat.isMe ? Colors.black : Colors.white,
-            fontSize: 16,
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Jerome',
+                  style: GoogleFonts.poppins(
+                    color: chat.isMe
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.secondary,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                Builder(builder: (context) {
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  );
+                }),
+                Icon(
+                  Icons.check,
+                  color: chat.isMe
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.secondary,
+                  size: 14,
+                )
+              ],
+            ),
+            TimeStampChatBubble(
+              text: chat.text,
+              sentAt: formatChatTime(chat.date),
+              textStyle: GoogleFonts.openSans(
+                color: chat.isMe
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onSecondary,
+                fontSize: 16,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -103,17 +136,8 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 String formatChatTime(DateTime messageTime) {
-  final currentTime = DateTime.now();
-  final difference = currentTime.difference(messageTime);
-
-  if (difference.inMinutes <= 1) {
-    return 'just now';
-  } else if (difference.inMinutes < 10) {
-    return '${difference.inMinutes} minutes ago';
-  } else {
-    // Format the time in your preferred way
-    final hour = messageTime.hour.toString().padLeft(2, '0');
-    final minute = messageTime.minute.toString().padLeft(2, '0');
-    return '$hour:$minute'; // Customize this format as needed
-  }
+  // Format the time in your preferred way
+  final hour = messageTime.hour.toString().padLeft(2, '0');
+  final minute = messageTime.minute.toString().padLeft(2, '0');
+  return '$hour:$minute'; // Customize this format as needed
 }

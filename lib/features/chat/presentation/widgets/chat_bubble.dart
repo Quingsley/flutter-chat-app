@@ -48,12 +48,13 @@ class TimeStampChatBubble extends LeafRenderObjectWidget {
 }
 
 class TimeStampedChatRenderObject extends RenderBox {
-  TimeStampedChatRenderObject(
-      {required String text,
-      required String sentAt,
-      required TextStyle textStyle,
-      required TextDirection textDirection,
-      required TextStyle sentAtStyle}) {
+  TimeStampedChatRenderObject({
+    required String text,
+    required String sentAt,
+    required TextStyle textStyle,
+    required TextDirection textDirection,
+    required TextStyle sentAtStyle,
+  }) {
     _text = text;
     _sentAt = sentAt;
     _textStyle = textStyle;

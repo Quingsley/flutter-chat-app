@@ -5,37 +5,36 @@ class TextInput extends StatelessWidget {
   const TextInput({
     super.key,
     required this.controller,
+    required this.hintText,
   });
 
   final TextEditingController controller;
+  final String hintText;
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontFamily: GoogleFonts.poppins().fontFamily),
+      controller: controller,
+      maxLines: null,
+      style:
+          TextStyle(fontSize: 16, fontFamily: GoogleFonts.poppins().fontFamily),
       decoration: InputDecoration(
         filled: true,
-        fillColor: const Color(0xff2e6b47).withOpacity(.4),
-        hintText: 'Enter your username',
+        fillColor: null,
+        hintText: hintText,
         contentPadding: const EdgeInsets.all(16),
-        hintStyle: const TextStyle(
-          color: Colors.white,
-        ),
-        border: const OutlineInputBorder(
+        border: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Color(0xFFFDC100),
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: const Color(0xFFFDC100).withOpacity(.5),
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Color(0xFFFDC100),
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
       ),
