@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -31,6 +29,7 @@ class SocketIO {
       var engine = socket.io.engine;
       debugPrint(engine!.transport!.name); // in most cases, prints "polling"
 
+//NOTE: Investing  if long polling is working since I have set transport to only use web sockets
       engine.once("upgrade", (data) {
         // called when the transport is upgraded (i.e. from HTTP long-polling to WebSocket)
         debugPrint(engine.transport!.name); // in most cases, prints "websocket"
