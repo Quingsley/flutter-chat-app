@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ui/features/auth/data/models/user_model.dart';
+import 'package:ui/features/chat/data/models/chat_model.dart';
 import 'package:ui/features/chat/presentation/pages/chat.dart';
+import 'package:ui/features/chat/presentation/viewmodels/chat_view_model.dart';
+import 'package:ui/shared/providers/shared_providers.dart';
+import 'package:uuid/uuid.dart';
 
-class NewMessageInput extends StatefulWidget {
-  const NewMessageInput({super.key});
+var uuid = const Uuid();
+
+class NewMessageInput extends ConsumerStatefulWidget {
+  const NewMessageInput({required this.contact, super.key});
+  final User contact;
 
   @override
-  State<NewMessageInput> createState() => _NewMessageInputState();
+  ConsumerState<NewMessageInput> createState() => _NewMessageInputState();
 }
 
-class _NewMessageInputState extends State<NewMessageInput> {
+class _NewMessageInputState extends ConsumerState<NewMessageInput> {
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -20,6 +29,7 @@ class _NewMessageInputState extends State<NewMessageInput> {
 
   @override
   Widget build(BuildContext context) {
+    var currentUser = ref.watch(currentUserProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
       child: TextField(
@@ -56,14 +66,19 @@ class _NewMessageInputState extends State<NewMessageInput> {
           ),
           suffixIcon: IconButton(
             onPressed: () {
-              chats.add(
-                Chat(
-                  isMe: true,
-                  text: _controller.text,
-                  date: DateTime.now(),
-                ),
+              Chat chat = Chat(
+                isRead: false,
+                receivedAt: '',
+                recipientId: widget.contact.userId,
+                senderId: currentUser!.userId,
+                message: _controller.text,
+                sentAt: DateTime.now().toIso8601String(),
+                chatId: uuid.v4(),
+                isMe: true,
               );
+              // chats.add();
               _controller.clear();
+              ref.read(chatViewModelProvider.notifier).sendChat(chat);
             },
             icon: Icon(
               Icons.send,

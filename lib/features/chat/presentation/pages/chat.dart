@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ui/features/auth/data/models/user_model.dart';
+import 'package:ui/features/chat/data/models/chat_model.dart';
 import 'package:ui/features/chat/presentation/widgets/chat_bubble.dart';
 import 'package:ui/features/chat/presentation/widgets/new_message_input.dart';
-
-class Chat {
-  final String text;
-  final DateTime date;
-  final bool isMe;
-
-  Chat({
-    required this.text,
-    required this.date,
-    required this.isMe,
-  });
-}
 
 List<Chat> chats = [];
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key, required this.title});
+  const ChatScreen({super.key, required this.contact});
 
-  final String title;
+  final User contact;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -35,7 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: Text(
-          widget.title,
+          widget.contact.userName,
           style: GoogleFonts.poppins(
             fontSize: 20,
             color: Theme.of(context).colorScheme.onPrimary,
@@ -58,11 +48,11 @@ class _ChatScreenState extends State<ChatScreen> {
           SizedBox(
             height: chats.isEmpty ? size.height * 0.3 : 0,
           ),
-          const NewMessageInput()
+          NewMessageInput(
+            contact: widget.contact,
+          )
         ],
       ),
-      // floatingActionButton: const NewMessageInput(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -119,8 +109,8 @@ class _ChatScreenState extends State<ChatScreen> {
               ],
             ),
             TimeStampChatBubble(
-              text: chat.text,
-              sentAt: formatChatTime(chat.date),
+              text: chat.message,
+              sentAt: formatChatTime(DateTime.parse(chat.sentAt)),
               textStyle: GoogleFonts.openSans(
                 color: chat.isMe
                     ? Theme.of(context).colorScheme.onPrimary

@@ -10,7 +10,7 @@ class ContactCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => context.push('/chat/${user.userName}'),
+      onTap: () => context.push('/chat', extra: user),
       leading: CircleAvatar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         radius: 30,
@@ -21,19 +21,20 @@ class ContactCard extends StatelessWidget {
         ),
       ),
       title: Text(
-        'Jerome',
+        user.userName,
         style: GoogleFonts.poppins(
           fontSize: 20,
         ),
       ),
       subtitle: Text(
-        'Hey, how are you?',
+        'Start a conversation',
         style: GoogleFonts.openSans(
           color: Colors.grey[600],
           fontSize: 16,
         ),
       ),
       trailing: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             '12:30',
@@ -42,7 +43,7 @@ class ContactCard extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 10,
+            height: 2,
           ),
           Container(
             height: 20,

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:socket_io_client/socket_io_client.dart';
 import 'package:http/http.dart' as http;
 import 'package:ui/features/auth/data/models/user_model.dart';
 
@@ -9,15 +8,10 @@ import 'package:uuid/uuid.dart';
 var uuid = const Uuid();
 
 class RemoteDataSource {
-  final Socket socket;
   final http.Client client;
   final String baseUrl = "http://192.168.3.140:3000";
 
-  RemoteDataSource({required this.socket, required this.client});
-  void connect() {
-    socket.connect();
-    socket.on("connect", (data) => print('${socket.id} connected'));
-  }
+  RemoteDataSource({required this.client});
 
   Future<User> signIn(String email) async {
     var requestBody = jsonEncode({

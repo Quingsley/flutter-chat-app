@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/features/add/presentation/pages/create_new_contact.dart';
+import 'package:ui/features/auth/data/models/user_model.dart';
 import 'package:ui/features/chat/presentation/pages/chat.dart';
 import 'package:ui/features/home/presentation/pages/home.dart';
 import 'package:ui/features/auth/presentation/pages/auth_page.dart';
@@ -22,9 +23,10 @@ class AppRoutes {
         },
       ),
       GoRoute(
-          path: '/chat/:index',
+          path: '/chat',
           builder: (context, state) {
-            return ChatScreen(title: state.pathParameters['index']!);
+            User user = state.extra as User;
+            return ChatScreen(contact: user);
           }),
       GoRoute(
         path: '/new-contact',

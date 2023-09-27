@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ui/features/auth/data/models/user_model.dart';
+import 'package:ui/services/socket.dart';
 import 'package:ui/shared/providers/shared_providers.dart';
 
 class WelcomeViewModel extends AsyncNotifier<User?> {
@@ -15,6 +16,11 @@ class WelcomeViewModel extends AsyncNotifier<User?> {
     final dataSource = ref.read(remoteDataSourceProvider);
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => dataSource.signUp(userName, email));
+  }
+
+  void connect() {
+    final socket = ref.read(socketProvider);
+    socket.connectUser();
   }
 
   @override

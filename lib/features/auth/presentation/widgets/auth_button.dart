@@ -68,6 +68,7 @@ class AuthButton extends ConsumerWidget {
 void loginHandler(TextEditingController emailController, WidgetRef ref) {
   if (emailController.text.isNotEmpty && emailController.text.contains('@')) {
     ref.read(authControllerProvider.notifier).signIn(emailController.text);
+    ref.read(authControllerProvider.notifier).connect();
     emailController.clear();
   }
 }
