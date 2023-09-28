@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ui/features/auth/data/models/user_model.dart';
+import 'package:ui/features/chat/presentation/pages/chat.dart';
+import 'package:ui/features/chat/presentation/providers/chat_providers.dart';
 
-class ContactCard extends StatelessWidget {
+class ContactCard extends ConsumerWidget {
   const ContactCard({super.key, required this.user});
   final User user;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var chats = ref.watch(chatListProvider);
     return ListTile(
       onTap: () => context.push('/chat', extra: user),
       leading: CircleAvatar(
@@ -27,7 +31,7 @@ class ContactCard extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        'Start a conversation',
+        chats.isNotEmpty ? chats.last.message : 'Start a conversation',
         style: GoogleFonts.openSans(
           color: Colors.grey[600],
           fontSize: 16,
@@ -36,31 +40,13 @@ class ContactCard extends StatelessWidget {
       trailing: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            '12:30',
-            style: GoogleFonts.openSans(
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(
-            height: 2,
-          ),
-          Container(
-            height: 20,
-            width: 20,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Center(
-              child: Text(
-                '2',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
+          if (chats.isNotEmpty)
+            Text(
+              formatChatTime(DateTime.parse(chats.last.sentAt)),
+              style: GoogleFonts.openSans(
+                fontSize: 16,
               ),
             ),
-          ),
         ],
       ),
     );

@@ -19,6 +19,5 @@ final httpProvider = Provider<http.Client>((ref) {
 });
 
 final contactsFutureProvider = FutureProvider.family((ref, String email) {
-  var homeVm = ref.watch(homeVmProvider);
-  return homeVm.getContacts(email);
+  return ref.read(homeVmProvider.notifier).getContacts(email);
 });

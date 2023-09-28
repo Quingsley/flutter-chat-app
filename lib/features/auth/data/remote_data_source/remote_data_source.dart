@@ -56,7 +56,7 @@ class RemoteDataSource {
       var data = jsonDecode(response.body);
       return data['contacts'].map<User>((e) => User.fromJson(e)).toList();
     } else {
-      throw Exception('Failed to load user');
+      throw Exception('Failed to get contacts');
     }
   }
 }

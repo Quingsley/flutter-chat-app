@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ui/features/auth/data/models/user_model.dart';
 import 'package:ui/features/chat/data/models/chat_model.dart';
-import 'package:ui/features/chat/presentation/pages/chat.dart';
 import 'package:ui/features/chat/presentation/viewmodels/chat_view_model.dart';
 import 'package:ui/shared/providers/shared_providers.dart';
 import 'package:uuid/uuid.dart';
@@ -75,8 +74,9 @@ class _NewMessageInputState extends ConsumerState<NewMessageInput> {
                 sentAt: DateTime.now().toIso8601String(),
                 chatId: uuid.v4(),
                 isMe: true,
+                messageLabel: currentUser.userName,
               );
-              // chats.add();
+
               _controller.clear();
               ref.read(chatViewModelProvider.notifier).sendChat(chat);
             },

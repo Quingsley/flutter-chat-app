@@ -9,6 +9,7 @@ class Chat extends Equatable {
   final String sentAt;
   final bool? isRead;
   final String? receivedAt;
+  final String messageLabel;
 
   const Chat({
     required this.chatId,
@@ -18,7 +19,8 @@ class Chat extends Equatable {
     required this.sentAt,
     this.isRead,
     this.receivedAt,
-    required this.isMe,
+    this.isMe = true,
+    required this.messageLabel,
   });
 
   factory Chat.fromJson(Map<String, dynamic> json) {
@@ -31,9 +33,9 @@ class Chat extends Equatable {
           'senderId': String senderId,
           'recipientId': String recipientId,
           'sentAt': String sentAt,
+          'messageLabel': String messageLabel,
         }) {
       return Chat(
-        isMe: false, //TODO: Check if theory is correct
         chatId: chatId,
         message: message,
         senderId: senderId,
@@ -41,6 +43,7 @@ class Chat extends Equatable {
         sentAt: sentAt,
         isRead: isRead,
         receivedAt: receivedAt,
+        messageLabel: messageLabel,
       );
     } else {
       throw const FormatException('Invalid json format');
@@ -55,6 +58,7 @@ class Chat extends Equatable {
         'senderId': senderId,
         'recipientId': recipientId,
         'sentAt': sentAt,
+        'messageLabel': messageLabel,
       };
 
   @override
