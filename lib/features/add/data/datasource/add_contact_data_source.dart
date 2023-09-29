@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:ui/features/add/data/models/new_contact_model.dart';
+import 'package:ui/shared/providers/shared_providers.dart';
 
 class AddContactDataSource {
   final http.Client client;
@@ -19,7 +21,12 @@ class AddContactDataSource {
     if (response.statusCode == 201) {
       return true;
     } else {
-      throw Exception(data['message']);
+      throw Exception(data['data']);
     }
   }
 }
+
+final addContactDataSourceProvider = Provider<AddContactDataSource>((ref) {
+  var client = ref.watch(httpProvider);
+  return AddContactDataSource(client: client);
+});

@@ -19,8 +19,7 @@ class WelcomeViewModel extends AsyncNotifier<User?> {
   }
 
   void connect() {
-    final socket = ref.read(socketProvider);
-    socket.connectUser();
+    ref.read(socketProvider.notifier).connectUser();
   }
 
   @override

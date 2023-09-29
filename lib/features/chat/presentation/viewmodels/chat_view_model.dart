@@ -7,11 +7,10 @@ import 'package:ui/shared/providers/shared_providers.dart';
 
 class ChatViewModel extends AsyncNotifier<void> {
   void sendChat(Chat chat) {
-    final socket = ref.read(socketProvider);
     var user = ref.read(currentUserProvider);
     user!.chats.add(chat);
     ref.read(currentUserProvider.notifier).state = user;
-    socket.sendChat(chat);
+    ref.read(socketProvider.notifier).sendChat(chat);
   }
 
   @override

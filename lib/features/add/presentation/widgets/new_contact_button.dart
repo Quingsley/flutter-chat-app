@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ui/features/add/presentation/widgets/new_contact_card.dart';
 
 class NewContactBtn extends StatelessWidget {
   const NewContactBtn({super.key});
@@ -8,11 +8,7 @@ class NewContactBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Scaffold.of(context).showBottomSheet(
-        (context) => const NewContactCard(),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        elevation: 0,
-      ),
+      onTap: () => context.push('/new-contact/add'),
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(

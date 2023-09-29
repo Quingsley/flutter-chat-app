@@ -99,6 +99,7 @@ extension AsyncValueUI<T> on AsyncValue<T?> {
         },
         data: (data) {
           if (data != null) {
+            debugPrint('data: $data');
             navigate();
           }
         },
