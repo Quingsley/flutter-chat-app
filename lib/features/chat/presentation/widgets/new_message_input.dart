@@ -65,6 +65,7 @@ class _NewMessageInputState extends ConsumerState<NewMessageInput> {
           ),
           suffixIcon: IconButton(
             onPressed: () {
+              if (_controller.text.isEmpty) return;
               Chat chat = Chat(
                 isRead: false,
                 receivedAt: '',

@@ -13,16 +13,18 @@ import 'package:ui/shared/providers/shared_providers.dart';
 class SocketIO extends AsyncNotifier<void> {
   late final Socket socket;
 
-  SocketIO() {
+  void init(String email) {
     socket = io('http://192.168.3.140:3000', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
+      'auth': {'token': email}
     });
   }
 
   bool get isConnected => socket.connected;
 //connect to socket
-  connectUser() {
+  connectUser(String email) {
+    init(email);
     socket.connect();
     socket.on("connect", (data) {
       debugPrint('${socket.id.toString()} connected');
@@ -45,6 +47,14 @@ class SocketIO extends AsyncNotifier<void> {
       stream.addResponse(Chat.fromJson(chat));
     });
 
+//private chat listener
+    socket.on('private-chat', (data) {
+      var stream = ref.read(chatStreamSocketProvider);
+      var chat = jsonDecode(data[0]);
+      debugPrint('private chat $chat');
+      stream.addResponse(Chat.fromJson(chat));
+    });
+
     socket.on('new-contact-added', (data) {
       // need to refresh contacts list
       debugPrint(data.toString());
@@ -64,7 +74,7 @@ class SocketIO extends AsyncNotifier<void> {
   }
 
   void newContactAdded(NewContactModel contact) {
-    socket.emit('new-contact', contact.toJson()); // to join rooms in server
+    socket.emit('join', contact.toJson()); // to join rooms in server
   }
 
   @override

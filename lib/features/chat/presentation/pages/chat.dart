@@ -7,6 +7,8 @@ import 'package:ui/features/chat/presentation/providers/chat_providers.dart';
 import 'package:ui/features/chat/presentation/widgets/chat_bubble.dart';
 import 'package:ui/features/chat/presentation/widgets/new_message_input.dart';
 import 'package:ui/services/stream_service.dart';
+import 'package:ui/shared/providers/shared_providers.dart';
+import 'package:ui/utils/utils.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key, required this.contact});
@@ -32,7 +34,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollToBottom();
+    var allChats = ref.read(chatListProvider);
+    var currentUser = ref.read(currentUserProvider);
+    var uiChats = distinguishChats(currentUser!, widget.contact, allChats);
+    if (uiChats.isNotEmpty) {
+      _scrollToBottom();
+    }
   }
 
   @override
@@ -45,16 +52,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
 
+    var allChats = ref.watch(chatListProvider);
+    var currentUser = ref.watch(currentUserProvider);
+    var uiChats = distinguishChats(currentUser!, widget.contact, allChats);
     ref.listen(groupChatStreamProvider, (previous, chats) {
       chats.whenOrNull(
         error: (error, stackTrace) => debugPrint(error.toString()),
         data: (chat) {
           ref.read(chatListProvider.notifier).addChat(chat);
-          _scrollToBottom();
+          if (uiChats.isNotEmpty) {
+            _scrollToBottom();
+          }
         },
       );
     });
-    var chats = ref.watch(chatListProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -71,18 +83,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          if (chats.isNotEmpty)
+          if (uiChats.isNotEmpty)
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: chats.length,
+                itemCount: uiChats.length,
                 itemBuilder: (context, index) {
-                  return chatBubble(chats[index], context);
+                  return chatBubble(uiChats[index], context);
                 },
               ),
             ),
           SizedBox(
-            height: chats.isEmpty ? size.height * 0.3 : 0,
+            height: uiChats.isEmpty ? size.height * 0.3 : 0,
           ),
           NewMessageInput(
             contact: widget.contact,
@@ -163,11 +175,4 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       ),
     );
   }
-}
-
-String formatChatTime(DateTime messageTime) {
-  // Format the time in your preferred way
-  final hour = messageTime.hour.toString().padLeft(2, '0');
-  final minute = messageTime.minute.toString().padLeft(2, '0');
-  return '$hour:$minute'; // Customize this format as needed
 }

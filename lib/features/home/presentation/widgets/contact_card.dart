@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ui/features/auth/data/models/user_model.dart';
-import 'package:ui/features/chat/presentation/pages/chat.dart';
 import 'package:ui/features/chat/presentation/providers/chat_providers.dart';
+import 'package:ui/shared/providers/shared_providers.dart';
+import 'package:ui/utils/utils.dart';
 
 class ContactCard extends ConsumerWidget {
   const ContactCard({super.key, required this.user});
@@ -12,7 +13,10 @@ class ContactCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var chats = ref.watch(chatListProvider);
+    var allChats = ref.watch(chatListProvider);
+    var currentUser = ref.watch(currentUserProvider);
+    var chats = distinguishChats(currentUser!, user, allChats);
+
     return ListTile(
       onTap: () => context.push('/chat', extra: user),
       leading: CircleAvatar(

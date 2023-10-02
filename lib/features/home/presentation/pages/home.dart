@@ -139,7 +139,7 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
             style: GoogleFonts.poppins(
                 color: Theme.of(context).colorScheme.onPrimary),
           ),
-          isExtended: isExtended, // to edit later when we hve scrolling
+          isExtended: !isExtended, // to edit later when we hve scrolling
           icon: Icon(
             Icons.message,
             color: Theme.of(context).colorScheme.secondary,

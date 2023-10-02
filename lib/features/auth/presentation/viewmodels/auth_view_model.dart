@@ -18,8 +18,8 @@ class WelcomeViewModel extends AsyncNotifier<User?> {
     state = await AsyncValue.guard(() => dataSource.signUp(userName, email));
   }
 
-  void connect() {
-    ref.read(socketProvider.notifier).connectUser();
+  void connect(String email) {
+    ref.read(socketProvider.notifier).connectUser(email);
   }
 
   @override

@@ -1,12 +1,15 @@
 import 'package:equatable/equatable.dart';
 import 'package:ui/features/chat/data/models/chat_model.dart';
 
+enum UserType { private, public }
+
 class User extends Equatable {
   final String userName;
   final String userId;
   final String email;
   final List<String> contacts;
   final List<Chat> chats;
+  final UserType type;
 
   const User({
     this.contacts = const <String>[],
@@ -14,6 +17,7 @@ class User extends Equatable {
     required this.email,
     required this.userName,
     required this.userId,
+    required this.type,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -24,6 +28,7 @@ class User extends Equatable {
           'email': String email,
           'contacts': List<dynamic> contacts,
           'chats': List<dynamic> chats,
+          'type': String type,
         }) {
       return User(
         userName: userName,
@@ -31,6 +36,7 @@ class User extends Equatable {
         email: email,
         contacts: contacts.map((e) => e.toString()).toList(),
         chats: chats.map((e) => Chat.fromJson(e)).toList(),
+        type: type == 'private' ? UserType.private : UserType.public,
       );
     } else {
       throw FormatException('Invalid json $json data format');
@@ -47,5 +53,5 @@ class User extends Equatable {
   }
 
   @override
-  List<Object?> get props => [userName, userId, email];
+  List<Object?> get props => [userName, userId, email, type];
 }
